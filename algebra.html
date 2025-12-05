@@ -457,9 +457,113 @@ A \ B = {x : x ∈ A and x ∉ B}
                         </ul>
                     </div>
                 </div>
+                
+                <div class="section">
+                    <h3 class="section-title">Power Sets & Cardinality</h3>
+                    <div class="definition-box">
+                        <strong>Power Set:</strong> Given a set S, the power set P(S) is the set of all subsets of S.
+                    </div>
+
+                    <div class="example-box">
+                        <strong>Examples:</strong>
+                        <ul>
+                            <li>If S = ∅, then P(∅) = {∅}, |P(∅)| = 1</li>
+                            <li>If S = {1}, then P({1}) = {∅, {1}}, |P({1})| = 2</li>
+                            <li>If S = {1,2}, then P({1,2}) = {∅, {1}, {2}, {1,2}}, |P({1,2})| = 4</li>
+                        </ul>
+                    </div>
+
+                    <div class="warning-box">
+                        <strong>Important Formula:</strong> If |S| = n, then |P(S)| = 2ⁿ
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h3 class="section-title">Set Identities</h3>
+                    
+                    <h4 style="color: #667eea; margin: 20px 0 10px 0;">Identity Laws</h4>
+                    <div class="formula">
+A ∪ ∅ = A
+A ∩ U = A
+                    </div>
+
+                    <h4 style="color: #667eea; margin: 20px 0 10px 0;">Domination Laws</h4>
+                    <div class="formula">
+A ∪ U = U
+A ∩ ∅ = ∅
+                    </div>
+
+                    <h4 style="color: #667eea; margin: 20px 0 10px 0;">Idempotent Laws</h4>
+                    <div class="formula">
+A ∪ A = A
+A ∩ A = A
+                    </div>
+
+                    <h4 style="color: #667eea; margin: 20px 0 10px 0;">DeMorgan's Laws for Sets</h4>
+                    <div class="formula">
+(A ∪ B)' = A' ∩ B'
+(A ∩ B)' = A' ∪ B'
+                    </div>
+
+                    <h4 style="color: #667eea; margin: 20px 0 10px 0;">Distributive Laws</h4>
+                    <div class="formula">
+A ∪ (B ∩ C) = (A ∪ B) ∩ (A ∪ C)
+A ∩ (B ∪ C) = (A ∩ B) ∪ (A ∩ C)
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h3 class="section-title">Computer Representation of Sets</h3>
+                    <p class="section-description">Sets can be represented in computers using bit strings.</p>
+                    
+                    <div class="example-box">
+                        <strong>Example:</strong> Universal set U = {1, 2, 3, 4, 5}
+                        <ul>
+                            <li>A = {2, 5} → represented as <strong>01001</strong></li>
+                            <li>B = {1, 5} → represented as <strong>10001</strong></li>
+                            <li>A ∪ B → bitwise OR → <strong>11001</strong> = {1, 2, 5}</li>
+                            <li>A ∩ B → bitwise AND → <strong>00001</strong> = {5}</li>
+                            <li>A' → bitwise NOT → <strong>10110</strong> = {1, 3, 4}</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h3 class="section-title">Venn Diagrams & Cardinality</h3>
+                    <p class="section-description">Venn diagrams visualize relationships between sets using overlapping circles.</p>
+                    
+                    <div class="warning-box">
+                        <strong>Set Union Formula:</strong> |A ∪ B| = |A| + |B| - |A ∩ B|
+                        <p style="margin-top: 10px;">This formula corrects for over-counting elements in the intersection.</p>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h3 class="section-title">Advanced Function Concepts</h3>
+                    
+                    <h4 style="color: #667eea; margin: 20px 0 10px 0;">Image of a Subset</h4>
+                    <div class="definition-box">
+                        <strong>Definition:</strong> If S ⊆ A, then f(S) = {f(s) : s ∈ S}
+                    </div>
+
+                    <div class="example-box">
+                        <strong>Example:</strong> Let A = {1, 2, 3}, B = {a, b, c}
+                        <br>f: 1→c, 2→a, 3→c
+                        <br>If S = {1, 3}, then f(S) = {c}
+                    </div>
+
+                    <div class="warning-box">
+                        <strong>Important:</strong> For finite sets of the same size, if f: A → A, then:
+                        <ul style="margin-top: 10px;">
+                            <li>f is injective if and only if f is surjective</li>
+                            <li>This does NOT hold for infinite sets!</li>
+                        </ul>
+                    </div>
+                </div>
             </div>
 
-            <div id="proofs" class="tab-content">
+            <div 548
+                class="tab-content">
                 <h2 class="chapter-title">Proof Techniques</h2>
 
                 <div class="section">
