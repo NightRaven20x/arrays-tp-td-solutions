@@ -1,1283 +1,571 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>Discrete Math & Algebra Study Guide</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<style>
-    :root{
-        --bg-gradient: linear-gradient(135deg,#0f172a,#1e293b,#0f766e);
-        --accent: #38bdf8;
-        --accent-soft: rgba(56,189,248,0.15);
-        --card-bg: rgba(15,23,42,0.92);
-        --card-border: rgba(148,163,184,0.3);
-        --text-main:#e5e7eb;
-        --text-muted:#9ca3af;
-        --yellow:#facc15;
-        --yellow-bg:rgba(250,204,21,0.1);
-        --blue:#38bdf8;
-        --blue-bg:rgba(56,189,248,0.08);
-        --green:#22c55e;
-        --green-bg:rgba(34,197,94,0.08);
-        --white-box-bg:#f9fafb;
-        --white-box-text:#111827;
-        --danger:#f97316;
-        --danger-bg:rgba(248,113,22,0.08);
-        --radius-lg:18px;
-        --shadow-lg:0 22px 60px rgba(15,23,42,0.9);
-        --transition-fast:0.22s ease;
-    }
-    *{box-sizing:border-box;margin:0;padding:0;}
-    body{
-        font-family: system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-        background: var(--bg-gradient);
-        color: var(--text-main);
-        min-height:100vh;
-        display:flex;
-        flex-direction:column;
-    }
-    .app-shell{
-        display:flex;
-        flex-direction:column;
-        min-height:100vh;
-    }
-    /* Sticky top bar with tabs */
-    .top-nav{
-        position:sticky;
-        top:0;
-        z-index:20;
-        backdrop-filter: blur(16px);
-        background: linear-gradient(to bottom,rgba(15,23,42,0.96),rgba(15,23,42,0.88));
-        border-bottom:1px solid rgba(148,163,184,0.35);
-    }
-    .top-nav-inner{
-        max-width:1200px;
-        margin:0 auto;
-        padding:12px 16px 8px;
-        display:flex;
-        flex-wrap:wrap;
-        align-items:center;
-        gap:10px;
-    }
-    .brand{
-        display:flex;
-        align-items:center;
-        gap:8px;
-        padding-right:8px;
-        border-right:1px solid rgba(148,163,184,0.35);
-        margin-right:4px;
-    }
-    .brand-logo{
-        width:32px;height:32px;
-        border-radius:12px;
-        background: radial-gradient(circle at 30% 20%,#38bdf8,#0ea5e9 40%,#22c55e 75%,#0f172a 100%);
-        box-shadow:0 0 0 1px rgba(148,163,184,0.5),0 12px 30px rgba(15,23,42,0.9);
-    }
-    .brand-text{
-        display:flex;
-        flex-direction:column;
-        line-height:1.1;
-    }
-    .brand-title{
-        font-size:14px;
-        font-weight:600;
-        letter-spacing:0.04em;
-        text-transform:uppercase;
-        color:#e5e7eb;
-    }
-    .brand-subtitle{
-        font-size:11px;
-        color:var(--text-muted);
-    }
-    .tabs{
-        display:flex;
-        flex-wrap:wrap;
-        gap:6px;
-        margin-left:auto;
-    }
-    .tab-btn{
-        border:none;
-        outline:none;
-        padding:7px 10px;
-        border-radius:999px;
-        font-size:12px;
-        font-weight:500;
-        color:var(--text-muted);
-        background: rgba(15,23,42,0.8);
-        border:1px solid transparent;
-        display:flex;
-        align-items:center;
-        gap:6px;
-        cursor:pointer;
-        transition: background var(--transition-fast), color var(--transition-fast), transform var(--transition-fast), border-color var(--transition-fast), box-shadow var(--transition-fast);
-        white-space:nowrap;
-    }
-    .tab-btn span.badge{
-        padding:1px 6px;
-        border-radius:999px;
-        font-size:10px;
-        background:rgba(148,163,184,0.18);
-        color:var(--text-muted);
-    }
-    .tab-btn.active{
-        color:#e5e7eb;
-        background: radial-gradient(circle at top left,rgba(56,189,248,0.25),rgba(15,23,42,0.95));
-        border-color:rgba(56,189,248,0.8);
-        box-shadow:0 10px 30px rgba(15,23,42,0.9),0 0 0 1px rgba(15,23,42,0.8);
-        transform: translateY(-1px);
-    }
-    .tab-btn:hover{
-        background: rgba(15,23,42,0.9);
-        transform: translateY(-1px);
-    }
-    .tab-btn.active span.badge{
-        background:rgba(56,189,248,0.25);
-        color:#e0f2fe;
-    }
-
-    /* Main content area */
-    .content-wrapper{
-        flex:1;
-        max-width:1200px;
-        margin:12px auto 24px;
-        padding:0 16px 16px;
-    }
-    .content-card{
-        background: radial-gradient(circle at top,rgba(15,23,42,0.94),rgba(15,23,42,0.98));
-        border-radius:24px;
-        box-shadow:var(--shadow-lg);
-        border:1px solid rgba(148,163,184,0.4);
-        padding:18px 18px 12px;
-        position:relative;
-        overflow:hidden;
-    }
-    .content-card::before{
-        content:"";
-        position:absolute;
-        inset:-120px;
-        background: radial-gradient(circle at top left,rgba(56,189,248,0.15),transparent 55%),radial-gradient(circle at bottom right,rgba(34,197,94,0.08),transparent 55%);
-        opacity:0.9;
-        pointer-events:none;
-    }
-    .card-inner{
-        position:relative;
-        z-index:1;
-        display:flex;
-        flex-direction:column;
-        gap:16px;
-        max-height:calc(100vh - 120px);
-        overflow:auto;
-        scroll-behavior:smooth;
-        padding-right:4px;
-    }
-    .card-inner::-webkit-scrollbar{
-        width:8px;
-    }
-    .card-inner::-webkit-scrollbar-track{
-        background:transparent;
-    }
-    .card-inner::-webkit-scrollbar-thumb{
-        background:rgba(148,163,184,0.6);
-        border-radius:999px;
-    }
-
-    /* Section styling */
-    h2{
-        font-size:20px;
-        font-weight:700;
-        margin-bottom:6px;
-        display:flex;
-        align-items:center;
-        gap:8px;
-    }
-    h2 .section-tag{
-        font-size:11px;
-        text-transform:uppercase;
-        letter-spacing:0.12em;
-        color:var(--text-muted);
-        padding:2px 8px;
-        border-radius:999px;
-        background:rgba(15,23,42,0.8);
-        border:1px solid rgba(148,163,184,0.45);
-    }
-    h3{
-        font-size:16px;
-        margin:12px 0 4px;
-    }
-    h4{
-        font-size:14px;
-        margin:8px 0 2px;
-        color:#e5e7eb;
-    }
-    p{
-        font-size:14px;
-        line-height:1.6;
-        color:var(--text-main);
-        margin-bottom:4px;
-    }
-    .muted{
-        color:var(--text-muted);
-        font-size:13px;
-    }
-
-    /* Info cards and boxes */
-    .grid-2{
-        display:grid;
-        grid-template-columns:repeat(2,minmax(0,1fr));
-        gap:12px;
-    }
-    @media(max-width:800px){
-        .grid-2{
-            grid-template-columns:1fr;
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Discrete Math & Logic - Study Guide</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
-        .top-nav-inner{
-            gap:8px;
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
         }
-        .brand{
-            border-right:none;
-            padding-right:0;
-            margin-right:0;
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
         }
-        .tabs{
-            width:100%;
-            justify-content:flex-start;
-            overflow-x:auto;
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
         }
-    }
-    .subcard{
-        background:var(--card-bg);
-        border-radius:var(--radius-lg);
-        border:1px solid var(--card-border);
-        padding:10px 12px;
-        box-shadow:0 10px 26px rgba(15,23,42,0.8);
-    }
-    .tag-row{
-        display:flex;
-        flex-wrap:wrap;
-        gap:6px;
-        margin-bottom:6px;
-    }
-    .tag{
-        font-size:10px;
-        text-transform:uppercase;
-        letter-spacing:0.14em;
-        padding:2px 7px;
-        border-radius:999px;
-        border:1px solid rgba(148,163,184,0.4);
-        color:var(--text-muted);
-        background:rgba(15,23,42,0.85);
-    }
 
-    .note-yellow{
-        border-left:3px solid var(--yellow);
-        background:var(--yellow-bg);
-        color:var(--yellow);
-        padding:8px 10px;
-        border-radius:10px;
-        font-size:13px;
-        margin:6px 0;
-    }
-    .example-blue{
-        border-left:3px solid var(--blue);
-        background:var(--blue-bg);
-        color:#e0f2fe;
-        padding:8px 10px;
-        border-radius:10px;
-        font-size:13px;
-        margin:6px 0;
-    }
-    .theorem-green{
-        border-left:3px solid var(--green);
-        background:var(--green-bg);
-        color:#bbf7d0;
-        padding:8px 10px;
-        border-radius:10px;
-        font-size:13px;
-        margin:6px 0;
-    }
-    .formula-box{
-        border-radius:10px;
-        border:1px dashed rgba(15,23,42,0.8);
-        background:var(--white-box-bg);
-        color:var(--white-box-text);
-        padding:8px 10px;
-        font-size:13px;
-        margin:6px 0;
-    }
-    .danger-box{
-        border-left:3px solid var(--danger);
-        background:var(--danger-bg);
-        color:#fed7aa;
-        padding:8px 10px;
-        border-radius:10px;
-        font-size:13px;
-        margin:6px 0;
-    }
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
 
-    ul,ol{
-        padding-left:18px;
-        margin:4px 0;
-    }
-    li{
-        font-size:13px;
-        line-height:1.6;
-        margin-bottom:2px;
-    }
+        .subtitle {
+            font-size: 1.1em;
+            opacity: 0.95;
+        }
 
-    table{
-        width:100%;
-        border-collapse:collapse;
-        margin:8px 0;
-        font-size:13px;
-        background:rgba(15,23,42,0.8);
-        border-radius:12px;
-        overflow:hidden;
-        box-shadow:0 12px 28px rgba(15,23,42,0.8);
-    }
-    th,td{
-        padding:6px 8px;
-        border:1px solid rgba(148,163,184,0.4);
-        text-align:left;
-    }
-    th{
-        background:rgba(15,23,42,0.95);
-        font-weight:600;
-        font-size:12px;
-    }
-    tr:nth-child(even){
-        background:rgba(15,23,42,0.9);
-    }
+        .nav-tabs {
+            display: flex;
+            background: #f8f9fa;
+            border-bottom: 2px solid #e9ecef;
+            padding: 0 40px;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
 
-    .flowchart{
-        border-radius:12px;
-        border:1px dashed rgba(148,163,184,0.6);
-        padding:10px;
-        font-size:13px;
-    }
-    .flow-step{
-        padding:4px 0;
-    }
-    .flow-arrow{
-        text-align:center;
-        font-size:11px;
-        color:var(--text-muted);
-        padding:1px 0;
-    }
+        .tab-btn {
+            padding: 15px 25px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 600;
+            color: #6c757d;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s;
+        }
 
-    .pill{
-        display:inline-block;
-        padding:1px 6px;
-        border-radius:999px;
-        font-size:11px;
-        border:1px solid rgba(148,163,184,0.5);
-        color:var(--text-muted);
-        margin-left:4px;
-    }
+        .tab-btn:hover {
+            color: #667eea;
+            background: rgba(102, 126, 234, 0.1);
+        }
 
-    .tab-panel{display:none;animation:fadeIn 0.25s ease;}
-    .tab-panel.active{display:block;}
-    @keyframes fadeIn{
-        from{opacity:0;transform:translateY(4px);}
-        to{opacity:1;transform:translateY(0);}
-    }
-</style>
+        .tab-btn.active {
+            color: #667eea;
+            border-bottom-color: #667eea;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.5s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .section {
+            margin-bottom: 40px;
+            border-left: 4px solid #667eea;
+            padding-left: 25px;
+        }
+
+        .section-title {
+            color: #667eea;
+            font-size: 1.6em;
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+
+        .section-description {
+            color: #495057;
+            margin-bottom: 20px;
+            line-height: 1.6;
+            font-size: 1.05em;
+        }
+
+        .definition-box {
+            background: #e7f3ff;
+            border-left: 4px solid #2196F3;
+            padding: 15px 20px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+
+        .example-box {
+            background: #f0f9ff;
+            border-left: 4px solid #667eea;
+            padding: 15px 20px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+
+        .truth-table {
+            width: 100%;
+            max-width: 500px;
+            border-collapse: collapse;
+            margin: 20px 0;
+            background: white;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .truth-table th {
+            background: #667eea;
+            color: white;
+            padding: 12px;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .truth-table td {
+            border: 1px solid #e9ecef;
+            padding: 10px;
+            text-align: center;
+        }
+
+        .truth-table tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+
+        .formula {
+            background: #282c34;
+            color: #61afef;
+            padding: 15px 20px;
+            border-radius: 8px;
+            font-family: 'Consolas', 'Monaco', monospace;
+            margin: 15px 0;
+            overflow-x: auto;
+        }
+
+        .warning-box {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px 20px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+
+        .chapter-title {
+            color: #495057;
+            font-size: 2em;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 3px solid #667eea;
+        }
+
+        ul {
+            margin-left: 25px;
+            line-height: 1.8;
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+    </style>
 </head>
 <body>
-<div class="app-shell">
-    <header class="top-nav">
-        <div class="top-nav-inner">
-            <div class="brand">
-                <div class="brand-logo"></div>
-                <div class="brand-text">
-                    <div class="brand-title">Discrete Math & Algebra</div>
-                    <div class="brand-subtitle">Logic • Proofs • Sets • Functions</div>
+    <div class="container">
+        <div class="header">
+            <h1>🧮 Discrete Math & Logic</h1>
+            <div class="subtitle">Complete Study Guide - Logic, Sets, Functions & Proofs</div>
+        </div>
+
+        <div class="nav-tabs">
+            <button class="tab-btn active" onclick="showTab('propositional')">Propositional Logic</button>
+            <button class="tab-btn" onclick="showTab('predicate')">Predicate Logic</button>
+            <button class="tab-btn" onclick="showTab('sets')">Sets & Functions</button>
+            <button class="tab-btn" onclick="showTab('proofs')">Proof Techniques</button>
+        </div>
+
+        <div class="content">
+            <div id="propositional" class="tab-content active">
+                <h2 class="chapter-title">Propositional Logic</h2>
+
+                <div class="section">
+                    <h3 class="section-title">What is a Proposition?</h3>
+                    <div class="definition-box">
+                        <strong>Definition:</strong> A proposition is a statement that is either true or false, but not both.
+                    </div>
+                    
+                    <div class="example-box">
+                        <strong>✅ Valid Propositions:</strong>
+                        <ul>
+                            <li>Pitt is located in Oakland. (True)</li>
+                            <li>5 + 2 = 8 (False)</li>
+                            <li>2 is a prime number. (True)</li>
+                        </ul>
+                    </div>
+
+                    <div class="example-box">
+                        <strong>❌ Not Propositions:</strong>
+                        <ul>
+                            <li>How are you? (Question)</li>
+                            <li>x + 5 = 3 (Variable not specified)</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h3 class="section-title">Logical Connectives</h3>
+                    
+                    <h4 style="color: #667eea; margin: 20px 0 10px 0;">1. Negation (¬p)</h4>
+                    <table class="truth-table">
+                        <tr><th>p</th><th>¬p</th></tr>
+                        <tr><td>T</td><td>F</td></tr>
+                        <tr><td>F</td><td>T</td></tr>
+                    </table>
+
+                    <h4 style="color: #667eea; margin: 20px 0 10px 0;">2. Conjunction (p ∧ q)</h4>
+                    <p>p AND q - true only when both are true</p>
+                    <table class="truth-table">
+                        <tr><th>p</th><th>q</th><th>p ∧ q</th></tr>
+                        <tr><td>T</td><td>T</td><td>T</td></tr>
+                        <tr><td>T</td><td>F</td><td>F</td></tr>
+                        <tr><td>F</td><td>T</td><td>F</td></tr>
+                        <tr><td>F</td><td>F</td><td>F</td></tr>
+                    </table>
+
+                    <h4 style="color: #667eea; margin: 20px 0 10px 0;">3. Disjunction (p ∨ q)</h4>
+                    <p>p OR q - false only when both are false</p>
+                    <table class="truth-table">
+                        <tr><th>p</th><th>q</th><th>p ∨ q</th></tr>
+                        <tr><td>T</td><td>T</td><td>T</td></tr>
+                        <tr><td>T</td><td>F</td><td>T</td></tr>
+                        <tr><td>F</td><td>T</td><td>T</td></tr>
+                        <tr><td>F</td><td>F</td><td>F</td></tr>
+                    </table>
+
+                    <h4 style="color: #667eea; margin: 20px 0 10px 0;">4. Implication (p → q)</h4>
+                    <p>"If p then q" - false only when p is true and q is false</p>
+                    <table class="truth-table">
+                        <tr><th>p</th><th>q</th><th>p → q</th></tr>
+                        <tr><td>T</td><td>T</td><td>T</td></tr>
+                        <tr><td>T</td><td>F</td><td>F</td></tr>
+                        <tr><td>F</td><td>T</td><td>T</td></tr>
+                        <tr><td>F</td><td>F</td><td>T</td></tr>
+                    </table>
+
+                    <div class="warning-box">
+                        <strong>Important Forms:</strong>
+                        <ul>
+                            <li><strong>Converse:</strong> q → p</li>
+                            <li><strong>Contrapositive:</strong> ¬q → ¬p</li>
+                            <li><strong>Inverse:</strong> ¬p → ¬q</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h3 class="section-title">Logical Equivalences</h3>
+                    
+                    <div class="formula">
+<strong>DeMorgan's Laws:</strong>
+¬(p ∧ q) ≡ ¬p ∨ ¬q
+¬(p ∨ q) ≡ ¬p ∧ ¬q
+                    </div>
+
+                    <div class="formula">
+<strong>Other Key Equivalences:</strong>
+Double Negation: ¬(¬p) ≡ p
+Commutative: p ∧ q ≡ q ∧ p
+Implication: p → q ≡ ¬p ∨ q
+                    </div>
                 </div>
             </div>
-            <div class="tabs">
-                <button class="tab-btn active" data-tab="tab-logic">
-                    Logic Basics
-                    <span class="badge">Propositions</span>
-                </button>
-                <button class="tab-btn" data-tab="tab-predicate">
-                    Predicate Logic
-                    <span class="badge">Quantifiers</span>
-                </button>
-                <button class="tab-btn" data-tab="tab-sets">
-                    Sets & Products
-                    <span class="badge">Algebra</span>
-                </button>
-                <button class="tab-btn" data-tab="tab-functions">
-                    Functions
-                    <span class="badge">Mappings</span>
-                </button>
-                <button class="tab-btn" data-tab="tab-proofs">
-                    Proof Techniques
-                    <span class="badge">Theorems</span>
-                </button>
-                <button class="tab-btn" data-tab="tab-quick">
-                    Quick Reference
-                    <span class="badge">Cheat sheet</span>
-                </button>
+
+            <div id="predicate" class="tab-content">
+                <h2 class="chapter-title">Predicate Logic</h2>
+
+                <div class="section">
+                    <h3 class="section-title">Predicates and Quantifiers</h3>
+                    <div class="definition-box">
+                        <strong>Predicate:</strong> A statement P(x) that becomes a proposition when x is specified.
+                    </div>
+
+                    <div class="example-box">
+                        <strong>Example:</strong> P(x) = "x is a prime number"
+                        <ul>
+                            <li>P(2) = True</li>
+                            <li>P(4) = False</li>
+                            <li>P(5) = True</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h3 class="section-title">Universal Quantifier (∀x)</h3>
+                    <p class="section-description">"For all x" - true when predicate holds for all elements</p>
+                    
+                    <div class="example-box">
+                        <strong>Example:</strong> ∀x P(x) means "P(x) is true for all x"
+                        <ul>
+                            <li>∀x (x > x - 1) is TRUE for all real numbers</li>
+                            <li>∀x Student(x) → Smart(x) means "All students are smart"</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h3 class="section-title">Existential Quantifier (∃x)</h3>
+                    <p class="section-description">"There exists x" - true when predicate holds for at least one element</p>
+                    
+                    <div class="example-box">
+                        <strong>Example:</strong> ∃x P(x) means "P(x) is true for some x"
+                        <ul>
+                            <li>∃x (x > 5) is TRUE (e.g., x = 10)</li>
+                            <li>∃x Student(x) ∧ Smart(x) means "Some student is smart"</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h3 class="section-title">Nested Quantifiers</h3>
+                    <p class="section-description">Order matters when quantifiers are different types!</p>
+                    
+                    <div class="example-box">
+                        <strong>Examples:</strong>
+                        <ul>
+                            <li>∀x ∃y Loves(x,y) = "Everyone loves somebody"</li>
+                            <li>∃y ∀x Loves(x,y) = "There is someone loved by everyone"</li>
+                        </ul>
+                    </div>
+
+                    <div class="warning-box">
+                        <strong>Note:</strong> ∀x ∃y P(x,
+y) is NOT the same as ∃y ∀x P(x,y)
+                    </div>
+                </div>
+            </div>
+
+            <div id="sets" class="tab-content">
+                <h2 class="chapter-title">Sets & Functions</h2>
+
+                <div class="section">
+                    <h3 class="section-title">What is a Set?</h3>
+                    <div class="definition-box">
+                        <strong>Definition:</strong> A set is a collection of distinct elements, often subsets of ℝ (real numbers) such as finite sets, intervals, or regions in the plane.
+                    </div>
+
+                    <div class="example-box">
+                        <strong>Examples:</strong>
+                        <ul>
+                            <li>A₁ = {1, 2, 3}</li>
+                            <li>A₂ = [1, 3] (interval from 1 to 3)</li>
+                            <li>A₃ = (2, 4) (open interval)</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h3 class="section-title">Set Operations</h3>
+                    
+                    <h4 style="color: #667eea; margin: 20px 0 10px 0;">Union (A ∪ B)</h4>
+                    <p>All elements in A or B or both</p>
+                    <div class="formula">
+A ∪ B = {x : x ∈ A or x ∈ B}
+                    </div>
+
+                    <h4 style="color: #667eea; margin: 20px 0 10px 0;">Intersection (A ∩ B)</h4>
+                    <p>Elements in both A and B</p>
+                    <div class="formula">
+A ∩ B = {x : x ∈ A and x ∈ B}
+                    </div>
+
+                    <h4 style="color: #667eea; margin: 20px 0 10px 0;">Complement (Ā)</h4>
+                    <p>All elements not in A</p>
+                    <div class="formula">
+Ā = {x ∈ E : x ∉ A}
+                    </div>
+
+                    <h4 style="color: #667eea; margin: 20px 0 10px 0;">Difference (A \ B)</h4>
+                    <p>Elements in A but not in B</p>
+                    <div class="formula">
+A \ B = {x : x ∈ A and x ∉ B}
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h3 class="section-title">Cartesian Product</h3>
+                    <div class="definition-box">
+                        <strong>Definition:</strong> A × B = {(a,b) : a ∈ A and b ∈ B}
+                    </div>
+
+                    <div class="example-box">
+                        <strong>Example:</strong> If A = {1, 2} and B = {x, y}, then
+                        <p>A × B = {(1,x), (1,y), (2,x), (2,y)}</p>
+                    </div>
+
+                    <div class="warning-box">
+                        <strong>Important:</strong> A × B ≠ B × A in general (order matters!)
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h3 class="section-title">Functions</h3>
+                    <div class="definition-box">
+                        <strong>Definition:</strong> A function f: A → B assigns each element in A to exactly one element in B.
+                    </div>
+
+                    <h4 style="color: #667eea; margin: 20px 0 10px 0;">Types of Functions:</h4>
+                    <ul>
+                        <li><strong>Injective (One-to-One):</strong> Different inputs → Different outputs
+                        <br>f(x₁) = f(x₂) implies x₁ = x₂</li>
+                        <li><strong>Surjective (Onto):</strong> Every element in B is mapped to
+                        <br>For all b ∈ B, there exists a ∈ A such that f(a) = b</li>
+                        <li><strong>Bijective:</strong> Both injective and surjective</li>
+                    </ul>
+
+                    <div class="example-box">
+                        <strong>Example from Exercise 04:</strong>
+                        <p>Check if f: ℝ² → ℝ², f(x,y) = (2x+y, 3x+y) is bijective</p>
+                        <ul>
+                            <li>To check injectivity: Show f(x₁,y₁) = f(x₂,y₂) implies (x₁,y₁) = (x₂,y₂)</li>
+                            <li>To check surjectivity: For any (a,b) ∈ ℝ², find (x,y) such that f(x,y) = (a,b)</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div id="proofs" class="tab-content">
+                <h2 class="chapter-title">Proof Techniques</h2>
+
+                <div class="section">
+                    <h3 class="section-title">1. Direct Proof</h3>
+                    <p class="section-description">To prove "If P then Q", assume P is true and show Q follows directly.</p>
+                    
+                    <div class="example-box">
+                        <strong>Example:</strong> Prove "If n is odd, then n² is odd"
+                        <ol>
+                            <li>Assume n is odd, so n = 2k + 1 for some integer k</li>
+                            <li>Then n² = (2k + 1)² = 4k² + 4k + 1 = 2(2k² + 2k) + 1</li>
+                            <li>This is of the form 2m + 1, so n² is odd ✓</li>
+                        </ol>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h3 class="section-title">2. Proof by Contrapositive</h3>
+                    <p class="section-description">To prove P → Q, instead prove ¬Q → ¬P (logically equivalent)</p>
+                    
+                    <div class="example-box">
+                        <strong>Example:</strong> Prove "If n² is even, then n is even"
+                        <ol>
+                            <li>Contrapositive: If n is odd, then n² is odd</li>
+                            <li>Assume n is odd: n = 2k + 1</li>
+                            <li>Then n² = 4k² + 4k + 1 (odd)</li>
+                            <li>Therefore the contrapositive is true, so original statement is true ✓</li>
+                        </ol>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h3 class="section-title">3. Proof by Contradiction</h3>
+                    <p class="section-description">Assume the opposite of what you want to prove, then derive a contradiction.</p>
+                    
+                    <div class="example-box">
+                        <strong>Example:</strong> Prove √2 is irrational
+                        <ol>
+                            <li>Assume √2 is rational, so √2 = p/q where p,q are integers with no common factors</li>
+                            <li>Then 2 = p²/q², so 2q² = p²</li>
+                            <li>This means p² is even, so p is even: p = 2k</li>
+                            <li>Then 2q² = (2k)² = 4k², so q² = 2k², meaning q is also even</li>
+                            <li>Contradiction! p and q both even, but we said they had no common factors</li>
+                            <li>Therefore √2 must be irrational ✓</li>
+                        </ol>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h3 class="section-title">4. Proof by Cases</h3>
+                    <p class="section-description">Break the proof into separate cases and prove each one.</p>
+                    
+                    <div class="example-box">
+                        <strong>Example:</strong> Prove for any integer n, n(n+1) is even
+                        <ul>
+                            <li><strong>Case 1:</strong> n is even → n = 2k → n(n+1) = 2k(n+1) (even) ✓</li>
+                            <li><strong>Case 2:</strong> n is odd → n+1 is even → n(n+1) = n·2k (even) ✓</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h3 class="section-title">Important Set Proofs</h3>
+                    
+                    <div class="example-box">
+                        <strong>Exercise 02.1:</strong> Show A ∩ B = A ∪ B ↔ A = B
+                        <p style="margin-top: 10px;"><strong>Proof:</strong></p>
+                        <ol>
+                            <li>(→) If A ∩ B = A ∪ B, then all elements in A∪B are in A∩B</li>
+                            <li>This means every element is in both A and B</li>
+                            <li>Therefore A ⊆ B and B ⊆ A, so A = B ✓</li>
+                        </ol>
+                    </div>
+
+                    <div class="example-box">
+                        <strong>Exercise 02.2:</strong> Show (A ∩ B) × (C ∩ D) = (A × C) ∩ (B × D)
+                        <p style="margin-top: 10px;"><strong>Proof:</strong></p>
+                        <ol>
+                            <li>Let (x,y) ∈ (A ∩ B) × (C ∩ D)</li>
+                            <li>Then x ∈ A ∩ B and y ∈ C ∩ D</li>
+                            <li>So x ∈ A, x ∈ B, y ∈ C, y ∈ D</li>
+                            <li>Therefore (x,y) ∈ A×C and (x,y) ∈ B×D</li>
+                            <li>So (x,y) ∈ (A × C) ∩ (B × D) ✓</li>
+                        </ol>
+                    </div>
+                </div>
             </div>
         </div>
-    </header>
-
-    <main class="content-wrapper">
-        <div class="content-card">
-            <div class="card-inner">
-
-                <!-- TAB 1: Logic Basics -->
-                <section id="tab-logic" class="tab-panel active">
-                    <h2>Propositional Logic & Connectives <span class="section-tag">Foundations</span></h2>
-                    <p class="muted">
-                        This tab covers propositional logic, truth tables, equivalences, and basic applications in reasoning and computer science. [file:3][file:4]
-                    </p>
-
-                    <div class="grid-2">
-                        <div class="subcard">
-                            <div class="tag-row">
-                                <span class="tag">What is this?</span>
-                            </div>
-                            <h3>What is a Proposition?</h3>
-                            <p>
-                                A proposition is a declarative statement that is either true or false, but not both. [file:3]
-                            </p>
-                            <p>
-                                Propositional logic combines simple propositions using logical connectives to build more complex statements whose truth values are determined systematically. [file:3][file:4]
-                            </p>
-                            <div class="note-yellow">
-                                Important: questions, commands, or expressions with unspecified variables (like “x + 5 = 3”) are not propositions because they do not have a fixed truth value. [file:3]
-                            </div>
-                        </div>
-
-                        <div class="subcard">
-                            <div class="tag-row">
-                                <span class="tag">When to use it?</span>
-                            </div>
-                            <h3>Applications of Propositional Logic</h3>
-                            <ul>
-                                <li>Describing and reasoning about conditions in algorithms, programs, and specifications. [file:3]</li>
-                                <li>Designing and verifying digital circuits using Boolean expressions and truth tables. [file:4]</li>
-                                <li>Formalising rules in AI systems, theorem provers, and expert systems like MYCIN. [file:2][file:4]</li>
-                            </ul>
-                            <div class="example-blue">
-                                Example: “If you are older than 13 or with your parents, then you can attend a PG‑13 movie” can be written as \((A \lor B) \to C\). [file:4]
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="subcard">
-                        <div class="tag-row">
-                            <span class="tag">Core concepts</span>
-                        </div>
-                        <h3>Logical Connectives at a Glance</h3>
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Connective</th>
-                                    <th>Symbol</th>
-                                    <th>Meaning (informal)</th>
-                                    <th>True when…</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>Negation</td>
-                                    <td>\(\lnot p\)</td>
-                                    <td>“not p”</td>
-                                    <td>p is false. [file:3]</td>
-                                </tr>
-                                <tr>
-                                    <td>Conjunction</td>
-                                    <td>\(p \land q\)</td>
-                                    <td>“p and q”</td>
-                                    <td>both p and q are true. [file:3]</td>
-                                </tr>
-                                <tr>
-                                    <td>Disjunction (inclusive)</td>
-                                    <td>\(p \lor q\)</td>
-                                    <td>“p or q or both”</td>
-                                    <td>at least one of p, q is true. [file:3]</td>
-                                </tr>
-                                <tr>
-                                    <td>Exclusive or</td>
-                                    <td>\(p \oplus q\)</td>
-                                    <td>“either p or q, but not both”</td>
-                                    <td>exactly one of p, q is true. [file:3]</td>
-                                </tr>
-                                <tr>
-                                    <td>Implication</td>
-                                    <td>\(p \to q\)</td>
-                                    <td>“if p then q”</td>
-                                    <td>false only when p is true and q is false. [file:3]</td>
-                                </tr>
-                                <tr>
-                                    <td>Biconditional</td>
-                                    <td>\(p \leftrightarrow q\)</td>
-                                    <td>“p if and only if q”</td>
-                                    <td>p and q have the same truth value. [file:3]</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                        <div class="formula-box">
-                            Key truth-table fact: an implication \(p \to q\) is logically equivalent to \(\lnot p \lor q\). [file:5]
-                        </div>
-                    </div>
-
-                    <div class="subcard">
-                        <div class="tag-row">
-                            <span class="tag">Step-by-step guide</span>
-                        </div>
-                        <h3>How to Build a Truth Table for a Compound Formula</h3>
-                        <h4>Problem type</h4>
-                        <p>Constructing the truth table of a compound proposition such as \((p \to q) \land (\lnot p \leftrightarrow q)\). [file:4]</p>
-
-                        <h4>Step-by-step:</h4>
-                        <ol>
-                            <li>Identify all distinct elementary propositions (here: p, q). [file:4]</li>
-                            <li>Determine the number of rows: use \(2^n\) where n is the number of propositions (here \(2^2 = 4\) rows). [file:4]</li>
-                            <li>Create columns for each elementary proposition and for all intermediate sub‑formulas (e.g., \(\lnot p\), \(p \to q\), \(\lnot p \leftrightarrow q\)). [file:4]</li>
-                            <li>Fill in the columns for p and q with all combinations of T and F. [file:4]</li>
-                            <li>Compute the truth value of each intermediate column using the definitions in the table above. [file:3][file:4]</li>
-                            <li>Finally compute the value of the target formula using the intermediate columns for each row. [file:4]</li>
-                            <li>Analyse the “target” column: if all entries are T, the formula is a tautology; if all F, a contradiction; otherwise a contingency. [file:4]</li>
-                        </ol>
-
-                        <div class="example-blue">
-                            Worked Example: Build the table for \((p \land q) \to p\). List columns p, q, \(p \land q\), \((p \land q) \to p\) and evaluate row by row; the final column is always T, so the formula is a tautology. [file:5]
-                        </div>
-
-                        <div class="danger-box">
-                            Common mistake: forgetting that inclusive “or” (\(\lor\)) is true when both operands are true, unlike exclusive “or” (\(\oplus\)). [file:3]
-                        </div>
-                    </div>
-
-                    <div class="grid-2">
-                        <div class="subcard">
-                            <div class="tag-row">
-                                <span class="tag">Theorems & rules</span>
-                            </div>
-                            <h3>Important Logical Equivalences</h3>
-                            <div class="theorem-green">
-                                De Morgan’s Laws: \(\lnot(p \lor q) \leftrightarrow (\lnot p \land \lnot q)\) and \(\lnot(p \land q) \leftrightarrow (\lnot p \lor \lnot q)\). [file:5]
-                            </div>
-                            <ul>
-                                <li>Double negation: \(\lnot(\lnot p) \leftrightarrow p\). [file:5]</li>
-                                <li>Distributive: \(p \lor (q \land r) \leftrightarrow (p \lor q) \land (p \lor r)\). [file:5]</li>
-                                <li>Implication: \(p \to q \leftrightarrow (\lnot p \lor q)\). [file:5]</li>
-                            </ul>
-                            <div class="note-yellow">
-                                Use these equivalences to simplify formulas and to transform them into forms better suited for proofs. [file:5]
-                            </div>
-                        </div>
-
-                        <div class="subcard">
-                            <div class="tag-row">
-                                <span class="tag">Common pitfalls</span>
-                            </div>
-                            <h3>What to Avoid</h3>
-                            <ul>
-                                <li>Treating \(p \to q\) as symmetric; the converse \(q \to p\) is not logically equivalent in general. [file:3]</li>
-                                <li>Confusing a statement with its inverse \(\lnot p \to \lnot q\); only the contrapositive \(\lnot q \to \lnot p\) is equivalent. [file:3]</li>
-                                <li>Mixing up inclusive and exclusive “or” in everyday language translations. [file:3][file:4]</li>
-                            </ul>
-                        </div>
-                    </div>
-                </section>
-
-                <!-- TAB 2: Predicate Logic -->
-                <section id="tab-predicate" class="tab-panel">
-                    <h2>Predicate Logic & Quantifiers <span class="section-tag">Structure</span></h2>
-                    <p class="muted">
-                        This tab upgrades propositional logic with variables, predicates and quantifiers to reason about groups of objects. [file:5][file:7]
-                    </p>
-
-                    <div class="grid-2">
-                        <div class="subcard">
-                            <div class="tag-row">
-                                <span class="tag">What is this?</span>
-                            </div>
-                            <h3>Predicates and Terms</h3>
-                            <p>
-                                Predicate logic introduces objects (constants and variables) and predicates that express properties or relations among these objects. [file:5][file:7]
-                            </p>
-                            <p>
-                                A predicate like \(P(x)\) becomes a proposition only after substituting a specific object for x, such as \(P(2)\) meaning “2 is prime”. [file:5][file:7]
-                            </p>
-                            <div class="example-blue">
-                                Example: Let Student(x) mean “x is a student”. Student(John) can be true, Student(Jane) can be false, depending on each person. [file:5][file:7]
-                            </div>
-                        </div>
-
-                        <div class="subcard">
-                            <div class="tag-row">
-                                <span class="tag">When to use it?</span>
-                            </div>
-                            <h3>Why Predicate Logic?</h3>
-                            <ul>
-                                <li>To express general rules like “all CS graduates passed CS441” without listing every graduate. [file:5][file:7]</li>
-                                <li>To talk about existence, such as “some student graduates with honors”. [file:5][file:7]</li>
-                                <li>To specify properties of data structures or systems in computer science (e.g., invariants). [file:5]</li>
-                            </ul>
-                            <div class="note-yellow">
-                                Predicate logic solves the limitation of propositional logic where repeated statements for many objects had to be enumerated one by one. [file:5][file:7]
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="subcard">
-                        <div class="tag-row">
-                            <span class="tag">Quantifiers</span>
-                        </div>
-                        <h3>Universal vs Existential Quantifier</h3>
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Quantifier</th>
-                                    <th>Notation</th>
-                                    <th>Meaning</th>
-                                    <th>True when…</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>Universal</td>
-                                    <td>\(\forall x P(x)\)</td>
-                                    <td>“for all x, P(x) holds”</td>
-                                    <td>P(x) is true for every element in the domain. [file:5][file:7]</td>
-                                </tr>
-                                <tr>
-                                    <td>Existential</td>
-                                    <td>\(\exists x P(x)\)</td>
-                                    <td>“there exists x such that P(x) holds”</td>
-                                    <td>P(x) is true for at least one element in the domain. [file:5][file:7]</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                        <div class="formula-box">
-                            Truth characterisation (finite domain): \(\forall x P(x)\) is equivalent to \(P(x_1) \land P(x_2) \land \dots \land P(x_N)\), while \(\exists x P(x)\) is equivalent to \(P(x_1) \lor P(x_2) \lor \dots \lor P(x_N)\). [file:7]
-                        </div>
-                    </div>
-
-                    <div class="subcard">
-                        <div class="tag-row">
-                            <span class="tag">Step-by-step guide</span>
-                        </div>
-                        <h3>Translating English Sentences with Quantifiers</h3>
-
-                        <h4>Problem type</h4>
-                        <p>Turn an English statement about many objects into a precise predicate‑logic formula. [file:5][file:7]</p>
-
-                        <h4>Step-by-step:</h4>
-                        <ol>
-                            <li>Choose the universe of discourse (e.g., “all people”, “all real numbers”). [file:5][file:7]</li>
-                            <li>Define predicates for properties and relations you need (e.g., Student(x), at(x,Upitt), Smart(x)). [file:5][file:7]</li>
-                            <li>Identify if the sentence speaks about “all”, “none” (universal) or “some”, “at least one” (existential). [file:5][file:7]</li>
-                            <li>Introduce variables and choose the right quantifier (∀ or ∃) with those variables. [file:5][file:7]</li>
-                            <li>Write the inner logical structure using →, ∧, ∨, ¬ to match the English meaning. [file:5][file:7]</li>
-                            <li>Simplify if possible (e.g., typical pattern: “All S are P” becomes \(\forall x (S(x) \to P(x))\)). [file:7]</li>
-                        </ol>
-
-                        <div class="example-blue">
-                            Example: “All Upitt students are smart”. If the domain is all people and Student(x) means “x is a student”, at(x,Upitt) means “x is at Upitt”, Smart(x) means “x is smart”, the translation is \(\forall x (Student(x) \land at(x,Upitt) \to Smart(x))\). [file:7]
-                        </div>
-                        <div class="example-blue">
-                            Example (existential): “Some Upitt student is smart” becomes \(\exists x (Student(x) \land at(x,Upitt) \land Smart(x))\). [file:7]
-                        </div>
-
-                        <div class="danger-box">
-                            Common mistake: using ∧ instead of → for universal statements; “All S are P” should be \(\forall x (S(x) \to P(x))\), not \(\forall x (S(x) \land P(x))\). [file:7]
-                        </div>
-                    </div>
-
-                    <div class="grid-2">
-                        <div class="subcard">
-                            <div class="tag-row">
-                                <span class="tag">Nested quantifiers</span>
-                            </div>
-                            <h3>Order of Quantifiers</h3>
-                            <p>
-                                When different kinds of quantifiers are nested, the order matters: \(\forall x \exists y\,L(x,y)\) is not equivalent to \(\exists y \forall x\,L(x,y)\). [file:7]
-                            </p>
-                            <div class="example-blue">
-                                Example: \(\forall x \exists y\,L(x,y)\) can mean “every person loves someone”, while \(\exists y \forall x\,L(x,y)\) means “there is someone whom everybody loves”. [file:7]
-                            </div>
-                            <div class="note-yellow">
-                                If all quantifiers are of the same type (all ∀ or all ∃), the order does not change the meaning. [file:7]
-                            </div>
-                        </div>
-
-                        <div class="subcard">
-                            <div class="tag-row">
-                                <span class="tag">Negation</span>
-                            </div>
-                            <h3>Negating Quantified Statements</h3>
-                            <div class="theorem-green">
-                                De Morgan laws for quantifiers: \(\lnot \exists x P(x) \leftrightarrow \forall x \lnot P(x)\) and \(\lnot \forall x P(x) \leftrightarrow \exists x \lnot P(x)\). [file:6]
-                            </div>
-                            <div class="example-blue">
-                                Example: “Nothing is perfect” can be written as \(\lnot \exists x\,Perfect(x)\) or equivalently as \(\forall x\,\lnot Perfect(x)\). [file:6]
-                            </div>
-                            <div class="danger-box">
-                                When pushing negation inside, always flip ∀ to ∃ and ∃ to ∀, and negate the predicate formula. [file:6]
-                            </div>
-                        </div>
-                    </div>
-                </section>
-
-                <!-- TAB 3: Sets & Products -->
-                <section id="tab-sets" class="tab-panel">
-                    <h2>Sets, Operations & Cartesian Products <span class="section-tag">Algebra I</span></h2>
-                    <p class="muted">
-                        This tab focuses on basic set operations, Cartesian products, and simple algebraic exercises involving subsets of \(\mathbb{R}\). [file:2]
-                    </p>
-
-                    <div class="grid-2">
-                        <div class="subcard">
-                            <div class="tag-row">
-                                <span class="tag">What is this?</span>
-                            </div>
-                            <h3>Sets and Basic Operations</h3>
-                            <p>
-                                A set is a collection of distinct elements, often subsets of \(\mathbb{R}\) such as finite sets, intervals, or regions in the plane. [file:2]
-                            </p>
-                            <p>
-                                Standard operations on sets include union, intersection, complement, and Cartesian product. [file:2]
-                            </p>
-                            <div class="example-blue">
-                                Example: \(A_1 = \{1,2,3\}\), \(A_2 = [1,3[\), \(A_3 = ]2,4]\), \(A_4 = \{0,1,2,3\}\) are subsets of \(\mathbb{R}\) combining discrete elements and intervals. [file:2]
-                            </div>
-                        </div>
-
-                        <div class="subcard">
-                            <div class="tag-row">
-                                <span class="tag">When to use it?</span>
-                            </div>
-                            <h3>Why Set Operations Matter</h3>
-                            <ul>
-                                <li>To describe domains and constraint regions in algebra and analysis. [file:2]</li>
-                                <li>To build relations and functions via Cartesian products. [file:2]</li>
-                                <li>To reason about combinations of conditions (e.g., solving inequalities that define subsets of \(\mathbb{R}\)). [file:2]</li>
-                            </ul>
-                        </div>
-                    </div>
-
-                    <div class="subcard">
-                        <div class="tag-row">
-                            <span class="tag">Step-by-step guide</span>
-                        </div>
-                        <h3>How to Compute Unions, Intersections & Cartesian Products</h3>
-
-                        <h4>Problem type</h4>
-                        <p>Given sets \(A_i\) in \(\mathbb{R}\), compute \(A_i \cup A_j\), \(A_i \cap A_j\), complements, and products \(A_i \times A_j\). [file:2]</p>
-
-                        <h4>Step-by-step for union/intersection:</h4>
-                        <ol>
-                            <li>Write down explicit descriptions of each set (elements or interval bounds). [file:2]</li>
-                            <li>For unions, include elements or points that belong to at least one set; for intersections, keep only elements common to all sets involved. [file:2]</li>
-                            <li>For intervals, reason on the number line about overlaps, endpoints, and openness/closedness. [file:2]</li>
-                            <li>Simplify the resulting description, merging adjacent intervals when appropriate. [file:2]</li>
-                        </ol>
-
-                        <h4>Step-by-step for Cartesian product:</h4>
-                        <ol>
-                            <li>Recall definition: \(A \times B = \{(a,b) \mid a \in A,\; b \in B\}\). [file:2]</li>
-                            <li>If sets are finite, list all ordered pairs explicitly. [file:2]</li>
-                            <li>If sets are intervals, describe the product as a region in \(\mathbb{R}^2\) (e.g., rectangle). [file:2]</li>
-                            <li>For intersections like \((A \times B) \cap (C \times D)\), use the identity \((A \times B) \cap (C \times D) = (A \cap C) \times (B \cap D)\) when valid. [file:2]</li>
-                        </ol>
-
-                        <div class="example-blue">
-                            Example: To show \((A \times B) \cap (C \times D) = (A \cap C) \times (B \cap D)\), take a generic pair \((x,y)\) in the left side and prove it must satisfy \(x \in A \cap C\) and \(y \in B \cap D\), and conversely. [file:2]
-                        </div>
-
-                        <div class="danger-box">
-                            Common mistake: assuming \(A \times B = B \times A\); in general, the order of coordinates changes the set of ordered pairs. [file:2]
-                        </div>
-                    </div>
-
-                    <div class="subcard">
-                        <div class="tag-row">
-                            <span class="tag">Inequalities in sets</span>
-                        </div>
-                        <h3>Sets Defined by Inequalities</h3>
-                        <p>
-                            Some exercises define sets \(E_i = \{x \in A_i \mid x^2 - 7x + 10 \le 0\}\), which require solving a quadratic inequality on each domain \(A_i\). [file:2]
-                        </p>
-
-                        <h4>Step-by-step solving quadratic inequalities on a set:</h4>
-                        <ol>
-                            <li>Factor the polynomial if possible (e.g., \(x^2 - 7x + 10 = (x-2)(x-5)\)). [file:2]</li>
-                            <li>Find roots and sign intervals of the product. [file:2]</li>
-                            <li>Determine where the expression is ≤ 0 or ≥ 0 using a sign chart. [file:2]</li>
-                            <li>Intersect this solution set with the given domain \(A_i\) to obtain \(E_i\). [file:2]</li>
-                        </ol>
-
-                        <div class="example-blue">
-                            Example: If the solution of \(x^2 - 7x + 10 \le 0\) is \([2,5]\), then for \(A_1 = \{1,2,3\}\) we get \(E_1 = \{2,3\}\) after intersecting. [file:2]
-                        </div>
-                    </div>
-                </section>
-
-                <!-- TAB 4: Functions -->
-                <section id="tab-functions" class="tab-panel">
-                    <h2>Functions, Images & Inverses <span class="section-tag">Mappings</span></h2>
-                    <p class="muted">
-                        This tab covers basic function concepts: images, preimages, injectivity, surjectivity, bijections and compositions. [file:2]
-                    </p>
-
-                    <div class="grid-2">
-                        <div class="subcard">
-                            <div class="tag-row">
-                                <span class="tag">What is this?</span>
-                            </div>
-                            <h3>Functions Between Sets</h3>
-                            <p>
-                                A function \(f : A \to B\) assigns each element of A exactly one element of B, called its image. [file:2]
-                            </p>
-                            <p>
-                                For a subset \(X \subseteq A\), the direct image \(f(X)\) and inverse image \(f^{-1}(Y)\) for \(Y \subseteq B\) are central in problem solving. [file:2]
-                            </p>
-                        </div>
-
-                        <div class="subcard">
-                            <div class="tag-row">
-                                <span class="tag">When to use it?</span>
-                            </div>
-                            <h3>Why Function Analysis?</h3>
-                            <ul>
-                                <li>To characterise solution sets via images and preimages. [file:2]</li>
-                                <li>To study injectivity/surjectivity (one‑to‑one, onto) for solving equations and building inverses. [file:2]</li>
-                                <li>To analyse compositions \(g \circ f\) in structured domains like \(\mathbb{R}\) and \(\mathbb{R}^2\). [file:2]</li>
-                            </ul>
-                        </div>
-                    </div>
-
-                    <div class="subcard">
-                        <div class="tag-row">
-                            <span class="tag">Step-by-step guide</span>
-                        </div>
-                        <h3>Computing Direct and Inverse Images</h3>
-
-                        <h4>Problem type</h4>
-                        <p>Given \(f : \mathbb{R} \to \mathbb{R}\) and a set \(A \subseteq \mathbb{R}\), find \(f(A)\) and \(f^{-1}(B)\) for some subset \(B\). [file:2]</p>
-
-                        <h4>Step-by-step for direct image \(f(A)\):</h4>
-                        <ol>
-                            <li>Write the expression for \(f(x)\). For instance, \(f(x) = |x| - 1\). [file:2]</li>
-                            <li>Describe A (e.g., interval \([-1,4]\)). [file:2]</li>
-                            <li>Analyse \(f(x)\) on A: split into pieces if needed (e.g., absolute value requires separating negative and non‑negative parts). [file:2]</li>
-                            <li>Determine the range values attained on A and express \(f(A)\) as intervals or unions. [file:2]</li>
-                        </ol>
-
-                        <h4>Step-by-step for inverse image \(f^{-1}(B)\):</h4>
-                        <ol>
-                            <li>Start from condition \(f(x) \in B\). Rewrite as inequalities or equations in x. [file:2]</li>
-                            <li>Solve these conditions to obtain allowed x values. [file:2]</li>
-                            <li>Intersect the solution with the domain of f if needed. [file:2]</li>
-                            <li>Express \(f^{-1}(B)\) as subsets (intervals or unions) of the domain. [file:2]</li>
-                        </ol>
-
-                        <div class="example-blue">
-                            Example: For \(f(x) = |x| - 1\) and \(A = [-1,4]\), first compute f on \([-1,0]\) and on \([0,4]\) separately to obtain the complete image. [file:2]
-                        </div>
-                    </div>
-
-                    <div class="grid-2">
-                        <div class="subcard">
-                            <div class="tag-row">
-                                <span class="tag">Injective / Surjective</span>
-                            </div>
-                            <h3>Checking Injectivity and Surjectivity</h3>
-                            <p>
-                                A function is injective if different inputs give different outputs, and surjective if every element in the codomain is attained as some output. [file:2]
-                            </p>
-                            <h4>Step-by-step to test injectivity over \(\mathbb{R}\):</h4>
-                            <ol>
-                                <li>Solve \(f(x_1) = f(x_2)\) and check whether this forces \(x_1 = x_2\). [file:2]</li>
-                                <li>If not, restrict the domain (e.g., to an interval) where the function becomes strictly monotone. [file:2]</li>
-                            </ol>
-                            <div class="example-blue">
-                                Example: For \(f(x) = \dfrac{x}{1 + x^2}\), the function is not injective on all \(\mathbb{R}\) but becomes injective when restricted to \(]1,+\infty[\) where it is strictly decreasing. [file:2]
-                            </div>
-                        </div>
-
-                        <div class="subcard">
-                            <div class="tag-row">
-                                <span class="tag">Compositions</span>
-                            </div>
-                            <h3>Understanding \(g \circ f\) and \(f \circ g\)</h3>
-                            <p>
-                                Given \(f : E \to F\) and \(g : F \to G\), the composition \(g \circ f\) maps x in E to \(g(f(x))\) in G, and order matters. [file:2]
-                            </p>
-                            <div class="example-blue">
-                                Example: For \(E = \mathbb{R}, F = ]-1,1[, G = \mathbb{R}\), \(f(x) = \frac{x}{1+|x|}\), \(g(x) = \sqrt{1-x}\), \(g \circ f\) is defined only where \(1 - f(x) \ge 0\) and \(|f(x)| \le 1\). [file:2]
-                            </div>
-                            <div class="danger-box">
-                                Always check that the image of the inner function lies inside the domain of the outer function before composing. [file:2]
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="subcard">
-                        <div class="tag-row">
-                            <span class="tag">Inverse functions</span>
-                        </div>
-                        <h3>Finding the Inverse of a Bijective Function</h3>
-                        <p>
-                            A bijective function is both injective and surjective, which guarantees the existence of a unique inverse function. [file:2]
-                        </p>
-                        <h4>Step-by-step to compute \(f^{-1}\):</h4>
-                        <ol>
-                            <li>Write \(y = f(x)\) and treat y as the output variable. [file:2]</li>
-                            <li>Solve this equation for x in terms of y, ensuring the solution respects the original domain/codomain restrictions. [file:2]</li>
-                            <li>Rename x ← \(f^{-1}(y)\), and clearly specify the domain of \(f^{-1}\) (equal to the codomain of f). [file:2]</li>
-                            <li>Verify \(f(f^{-1}(y)) = y\) and \(f^{-1}(f(x)) = x\) for all allowed x and y. [file:2]</li>
-                        </ol>
-
-                        <div class="example-blue">
-                            Example: For \(f(x) = \frac{x}{1 + |x|}\) from \(\mathbb{R}\) to \(]-1,1[\), once bijectivity is established, solve \(y = \frac{x}{1 + |x|}\) for x in terms of y to derive \(f^{-1}\). [file:2]
-                        </div>
-                    </div>
-                </section>
-
-                <!-- TAB 5: Proof Techniques -->
-                <section id="tab-proofs" class="tab-panel">
-                    <h2>Proof Methods & Theorems <span class="section-tag">Reasoning</span></h2>
-                    <p class="muted">
-                        This tab organises formal and informal proof techniques: direct, indirect, contradiction, cases, and equivalence proofs. [file:1][file:6]
-                    </p>
-
-                    <div class="grid-2">
-                        <div class="subcard">
-                            <div class="tag-row">
-                                <span class="tag">What is this?</span>
-                            </div>
-                            <h3>Theorems and Proofs</h3>
-                            <p>
-                                A theorem is a statement that can be shown to be true by a logically valid argument using premises, axioms, and already proven results. [file:1][file:6]
-                            </p>
-                            <p>
-                                Formal proofs derive the conclusion from the premises using explicit rules of inference, while informal proofs mix mathematical language and natural language but should still be logically sound. [file:1][file:6]
-                            </p>
-                        </div>
-
-                        <div class="subcard">
-                            <div class="tag-row">
-                                <span class="tag">When to use them?</span>
-                            </div>
-                            <h3>Role in Computer Science</h3>
-                            <ul>
-                                <li>To verify program correctness and prove properties such as loop invariants. [file:1]</li>
-                                <li>To reason about algorithms and data structures (e.g., termination, complexity). [file:1]</li>
-                                <li>To design and validate logical systems like theorem provers and rule-based AI. [file:6]</li>
-                            </ul>
-                        </div>
-                    </div>
-
-                    <div class="subcard">
-                        <div class="tag-row">
-                            <span class="tag">Methods</span>
-                        </div>
-                        <h3>Overview of Proof Methods</h3>
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Method</th>
-                                    <th>Pattern</th>
-                                    <th>Main idea</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>Direct proof</td>
-                                    <td>show \(p \to q\)</td>
-                                    <td>assume p is true and derive q by algebra and known facts. [file:1][file:6]</td>
-                                </tr>
-                                <tr>
-                                    <td>Indirect proof</td>
-                                    <td>show \(\lnot q \to \lnot p\)</td>
-                                    <td>prove the contrapositive, which is logically equivalent. [file:1][file:6]</td>
-                                </tr>
-                                <tr>
-                                    <td>Proof by contradiction</td>
-                                    <td>assume \(p \land \lnot q\)</td>
-                                    <td>derive a contradiction with premises or known facts, forcing \(p \to q\) to be true. [file:1]</td>
-                                </tr>
-                                <tr>
-                                    <td>Proof by cases</td>
-                                    <td>\(p_1 \lor \dots \lor p_n \to q\)</td>
-                                    <td>prove q separately under each possible case \(p_i\). [file:1]</td>
-                                </tr>
-                                <tr>
-                                    <td>Equivalence proof</td>
-                                    <td>show \(p \leftrightarrow q\)</td>
-                                    <td>prove both directions \(p \to q\) and \(q \to p\). [file:1]</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-
-                    <div class="grid-2">
-                        <div class="subcard">
-                            <div class="tag-row">
-                                <span class="tag">Step-by-step</span>
-                            </div>
-                            <h3>Direct Proof of an Implication</h3>
-                            <h4>Problem type</h4>
-                            <p>Prove a statement “if p, then q” about integers, reals, or other structures. [file:1][file:6]</p>
-
-                            <h4>Step-by-step:</h4>
-                            <ol>
-                                <li>Rewrite the statement in symbolic form \(p \to q\); identify hypothesis p and conclusion q. [file:1][file:6]</li>
-                                <li>Assume p is true (for arbitrary but fixed objects, e.g. integer n). [file:1][file:6]</li>
-                                <li>Use definitions (e.g., even, odd), algebra, and known lemmas to manipulate expressions. [file:1][file:6]</li>
-                                <li>Gradually transform the hypothesis into the desired form of q. [file:1][file:6]</li>
-                                <li>Conclude that since p implies q for an arbitrary object, the implication holds in general. [file:1][file:6]</li>
-                            </ol>
-
-                            <div class="example-blue">
-                                Example: To prove “If n is odd, then \(n^2\) is odd”, write n as \(2k+1\), compute \(n^2\), and show it has the form \(2m+1\) for some integer m. [file:1][file:6]
-                            </div>
-                        </div>
-
-                        <div class="subcard">
-                            <div class="tag-row">
-                                <span class="tag">Step-by-step</span>
-                            </div>
-                            <h3>Indirect Proof (Contrapositive)</h3>
-                            <h4>Problem type</h4>
-                            <p>Prove \(p \to q\) by showing \(\lnot q \to \lnot p\) instead. [file:1][file:6]</p>
-
-                            <h4>Step-by-step:</h4>
-                            <ol>
-                                <li>Identify p and q in the original implication. [file:1][file:6]</li>
-                                <li>Formulate the contrapositive statement \(\lnot q \to \lnot p\). [file:1][file:6]</li>
-                                <li>Assume \(\lnot q\) and manipulate algebraically to show \(\lnot p\) must hold. [file:1][file:6]</li>
-                                <li>Conclude that since the contrapositive is true, the original implication is also true. [file:1][file:6]</li>
-                            </ol>
-
-                            <div class="example-blue">
-                                Example: For the theorem “If \(3n+2\) is odd then n is odd”, prove instead that “If n is even then \(3n+2\) is even” and note this is equivalent to the original statement. [file:1][file:6]
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="subcard">
-                        <div class="tag-row">
-                            <span class="tag">Contradiction & Cases</span>
-                        </div>
-                        <h3>Proof by Contradiction and Proof by Cases</h3>
-
-                        <h4>Proof by contradiction:</h4>
-                        <ol>
-                            <li>Assume both the hypothesis p and the negation of the conclusion \(\lnot q\). [file:1]</li>
-                            <li>Use algebraic manipulation and known facts to derive a statement that contradicts premises or an established theorem. [file:1]</li>
-                            <li>Conclude that the assumption \(p \land \lnot q\) is impossible, so \(p \to q\) must hold. [file:1]</li>
-                        </ol>
-
-                        <div class="example-blue">
-                            Example: Again for “If \(3n+2\) is odd then n is odd”, assume \(3n+2\) is odd and n is even, derive that \(3n+2\) is even, which contradicts the assumption. [file:1]
-                        </div>
-
-                        <h4>Proof by cases:</h4>
-                        <ol>
-                            <li>Express the hypothesis as a disjunction \(p_1 \lor \dots \lor p_n\). [file:1]</li>
-                            <li>Treat each case \(p_i\) separately, assuming it true and proving q. [file:1]</li>
-                            <li>Once all cases imply q, conclude \(p_1 \lor \dots \lor p_n \to q\). [file:1]</li>
-                        </ol>
-
-                        <div class="example-blue">
-                            Example: To prove \(|x||y| = |xy|\), split into four cases depending on signs of x and y (both non‑negative, one negative, both negative) and verify equality holds in each case. [file:1]
-                        </div>
-
-                        <div class="danger-box">
-                            Failing to cover all possible cases, or using overlapping/incomplete partitions, leads to incorrect proofs by cases. [file:1]
-                        </div>
-                    </div>
-
-                    <div class="subcard">
-                        <div class="tag-row">
-                            <span class="tag">Rules of inference</span>
-                        </div>
-                        <h3>Formal Proofs with Inference Rules</h3>
-                        <p>
-                            Rules of inference, such as Modus Ponens, Modus Tollens, Addition, Simplification, and Hypothetical Syllogism, justify each step of a formal derivation. [file:6]
-                        </p>
-                        <div class="theorem-green">
-                            Example rule (Modus Ponens): from p and \(p \to q\), infer q; the pattern corresponds to the tautology \((p \land (p \to q)) \to q\). [file:6]
-                        </div>
-                        <div class="example-blue">
-                            Example application: from premises “if we take a canoe trip then we will be home by sunset” and “we take a canoe trip”, conclude “we will be home by sunset”. [file:6]
-                        </div>
-                    </div>
-                </section>
-
-                <!-- TAB 6: Quick Reference -->
-                <section id="tab-quick" class="tab-panel">
-                    <h2>Quick Reference & Flowcharts <span class="section-tag">Cheat Sheet</span></h2>
-                    <p class="muted">
-                        Use this tab for last‑minute revision: flowcharts, decision trees, common pitfalls, and essential formulas. [file:1][file:2][file:5][file:6][file:7]
-                    </p>
-
-                    <div class="grid-2">
-                        <div class="subcard">
-                            <div class="tag-row">
-                                <span class="tag">Flowchart</span>
-                            </div>
-                            <h3>When Asked to Prove “If p then q”</h3>
-                            <div class="flowchart">
-                                <div class="flow-step"><strong>Start:</strong> Identify p (hypothesis) and q (conclusion).</div>
-                                <div class="flow-arrow">▼ choose strategy</div>
-                                <div class="flow-step"><strong>Option 1: Direct proof</strong> – assume p and algebraically derive q. Use definitions, identities, and earlier results. [file:1][file:6]</div>
-                                <div class="flow-arrow">or</div>
-                                <div class="flow-step"><strong>Option 2: Contrapositive</strong> – reformulate as \(\lnot q \to \lnot p\), assume \(\lnot q\) and derive \(\lnot p\). [file:1][file:6]</div>
-                                <div class="flow-arrow">or</div>
-                                <div class="flow-step"><strong>Option 3: Contradiction</strong> – assume \(p \land \lnot q\) and reach a contradiction with known facts. [file:1]</div>
-                                <div class="flow-arrow">or</div>
-                                <div class="flow-step"><strong>Option 4: Cases</strong> – if p splits into sub‑cases, prove q in each case. [file:1]</div>
-                                <div class="flow-arrow">▼</div>
-                                <div class="flow-step"><strong>Finish:</strong> Summarise the chain from assumption(s) to conclusion, indicating which method you used. [file:1][file:6]</div>
-                            </div>
-                        </div>
-
-                        <div class="subcard">
-                            <div class="tag-row">
-                                <span class="tag">Decision tree</span>
-                            </div>
-                            <h3>Choosing a Proof Method</h3>
-                            <div class="flowchart">
-                                <div class="flow-step"><strong>Q1:</strong> Is the statement already in the form “for all x, if condition then conclusion”?</div>
-                                <div class="flow-arrow">Yes → consider direct or contrapositive</div>
-                                <div class="flow-step"><strong>Q2:</strong> Is the conclusion a negative claim (“… is not …”, “no …”)?</div>
-                                <div class="flow-arrow">Yes → contrapositive or contradiction often fits well</div>
-                                <div class="flow-step"><strong>Q3:</strong> Does the hypothesis naturally split into disjoint cases (e.g., sign of a number)?</div>
-                                <div class="flow-arrow">Yes → use proof by cases</div>
-                                <div class="flow-step"><strong>Q4:</strong> Are you trying to show two statements are equivalent?</div>
-                                <div class="flow-arrow">Yes → prove each direction separately, or transform using equivalences</div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="subcard">
-                        <div class="tag-row">
-                            <span class="tag">Cheat sheet</span>
-                        </div>
-                        <h3>Essential Logic Formulas & Patterns</h3>
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th>Topic</th>
-                                    <th>Key Formulas / Rules</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>Equivalences</td>
-                                    <td>
-                                        De Morgan: \(\lnot(p \lor q) \leftrightarrow (\lnot p \land \lnot q)\), \(\lnot(p \land q) \leftrightarrow (\lnot p \lor \lnot q)\); implication: \(p \to q \leftrightarrow (\lnot p \lor q)\). [file:5]
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>Quantifier negation</td>
-                                    <td>
-                                        \(\lnot \exists x P(x) \leftrightarrow \forall x \lnot P(x)\); \(\lnot \forall x P(x) \leftrightarrow \exists x \lnot P(x)\). [file:6]
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>Equivalence proof</td>
-                                    <td>
-                                        To show \(p \leftrightarrow q\), prove \(p \to q\) and \(q \to p\) separately. [file:1]
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>Set products</td>
-                                    <td>
-                                        \((A \times B) \cap (C \times D) = (A \cap C) \times (B \cap D)\) under standard set‑theoretic assumptions. [file:2]
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>Images</td>
-                                    <td>
-                                        For \(f : A \to B\), \(f(A_1 \cup A_2) = f(A_1) \cup f(A_2)\) and \(f^{-1}(B_1 \cup B_2) = f^{-1}(B_1) \cup f^{-1}(B_2)\) (general properties you can use alongside the worksheet examples). [file:2]
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-
-                    <div class="grid-2">
-                        <div class="subcard">
-                            <div class="tag-row">
-                                <span class="tag">Common pitfalls</span>
-                            </div>
-                            <h3>Logic & Proof Pitfalls</h3>
-                            <ul>
-                                <li>Assuming the converse or inverse of an implication is automatically true. [file:3]</li>
-                                <li>Mixing up ∀ and ∃ when negating quantified statements. [file:6]</li>
-                                <li>Leaving steps unjustified in a proof, rather than citing clear rules or algebra. [file:1][file:6]</li>
-                            </ul>
-                        </div>
-
-                        <div class="subcard">
-                            <div class="tag-row">
-                                <span class="tag">Common pitfalls</span>
-                            </div>
-                            <h3>Sets & Functions Pitfalls</h3>
-                            <ul>
-                                <li>Assuming \(A \times B = B \times A\) or mis‑ordering coordinates in Cartesian products. [file:2]</li>
-                                <li>Ignoring domain/codomain restrictions when computing images, preimages, or inverses. [file:2]</li>
-                                <li>Claiming a function is bijective without verifying both injectivity and surjectivity. [file:2]</li>
-                            </ul>
-                        </div>
-                    </div>
-                </section>
-
-            </div>
-        </div>
-    </main>
-</div>
-
-<script>
-(function(){
-    const tabs = document.querySelectorAll('.tab-btn');
-    const panels = document.querySelectorAll('.tab-panel');
-
-    function activateTab(id){
-        panels.forEach(p => {
-            if(p.id === id){
-                p.classList.add('active');
-            }else{
-                p.classList.remove('active');
-            }
-        });
-        tabs.forEach(btn => {
-            if(btn.getAttribute('data-tab') === id){
-                btn.classList.add('active');
-            }else{
-                btn.classList.remove('active');
-            }
-        });
-    }
-
-    tabs.forEach(btn => {
-        btn.addEventListener('click', () => {
-            const id = btn.getAttribute('data-tab');
-            if(!id) return;
-            activateTab(id);
-        });
-    });
-
-    // Initial sanity check: ensure at least one active tab and panel
-    const anyActivePanel = document.querySelector('.tab-panel.active');
-    if(!anyActivePanel && panels.length > 0){
-        panels[0].classList.add('active');
-    }
-    const anyActiveTab = document.querySelector('.tab-btn.active');
-    if(!anyActiveTab && tabs.length > 0){
-        tabs[0].classList.add('active');
-    }
-})();
-</script>
+    </div>
+
+    <script>
+        function showTab(tabName) {
+            // Hide all tab contents
+            const contents = document.querySelectorAll('.tab-content');
+            contents.forEach(content => content.classList.remove('active'));
+
+            // Remove active class from all buttons
+            const buttons = document.querySelectorAll('.tab-btn');
+            buttons.forEach(btn => btn.classList.remove('active'));
+
+            // Show selected tab
+            document.getElementById(tabName).classList.add('active');
+
+            // Activate clicked button
+            event.target.classList.add('active');
+        }
+    </script>
 </body>
 </html>
